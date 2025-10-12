@@ -1,57 +1,97 @@
-import { useState } from 'react';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Dashboard from './pages/Dashboard';
-import Prescriptions from './pages/Prescriptions';
-import Reminders from './pages/Reminders';
-import Family from './pages/Family';
-import Profile from './pages/Profile';
-
-function AppContent() {
-  const { user, loading } = useAuth();
-  const [currentPage, setCurrentPage] = useState('dashboard');
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-white">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading MedMate...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    if (currentPage === 'signup') {
-      return <Signup onNavigate={setCurrentPage} />;
-    }
-    return <Login onNavigate={setCurrentPage} />;
-  }
-
-  return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <Header onNavigate={setCurrentPage} currentPage={currentPage} />
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {currentPage === 'dashboard' && <Dashboard onNavigate={setCurrentPage} />}
-        {currentPage === 'prescriptions' && <Prescriptions />}
-        {currentPage === 'reminders' && <Reminders />}
-        {currentPage === 'family' && <Family />}
-        {currentPage === 'profile' && <Profile />}
-      </main>
-      <Footer />
-    </div>
-  );
-}
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
+import Prescriptions from "./pages/Prescriptions";
+import Reminders from "./pages/Reminders";
+import Family from "./pages/Family";
+import Profile from "./pages/Profile";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import AddPrescription from "./components/AddPrescription";
+import AddFamilyMember from "./components/AddFamilyMember";
+import { useAuth } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
+  const { user } = useAuth();
+
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    // <Router>
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        {/* Show Header only if logged in */}
+        {user && <Header />}
+
+        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+
+            {/* Protected Routes */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/prescriptions"
+              element={
+                <ProtectedRoute>
+                  <Prescriptions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-prescription"
+              element={
+                <ProtectedRoute>
+                  <AddPrescription />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-family-member"
+              element={
+                <ProtectedRoute>
+                  <AddFamilyMember />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reminders"
+              element={
+                <ProtectedRoute>
+                  <Reminders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/family"
+              element={
+                <ProtectedRoute>
+                  <Family />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </main>
+
+        {/* Show Footer only if logged in */}
+        {user && <Footer />}
+      </div>
+    // </Router>
   );
 }
 

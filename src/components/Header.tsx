@@ -1,38 +1,39 @@
 import { useAuth } from '../context/AuthContext';
 import { LogOut, Menu, X, Pill } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-interface HeaderProps {
-  onNavigate: (page: string) => void;
-  currentPage: string;
-}
-
-export default function Header({ onNavigate, currentPage }: HeaderProps) {
+export default function Header() {
   const { user, signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSignOut = async () => {
     try {
       await signOut();
-      onNavigate('login');
+      navigate('/login');
     } catch (error) {
       console.error('Error signing out:', error);
     }
   };
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard' },
-    { id: 'prescriptions', label: 'Prescriptions' },
-    { id: 'reminders', label: 'Reminders' },
-    { id: 'family', label: 'Family' },
-    { id: 'profile', label: 'Profile' },
+    { path: '/', label: 'Dashboard' },
+    { path: '/prescriptions', label: 'Prescriptions' },
+    { path: '/reminders', label: 'Reminders' },
+    { path: '/family', label: 'Family' },
+    { path: '/profile', label: 'Profile' },
   ];
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-2 cursor-pointer" onClick={() => onNavigate('dashboard')}>
+          <div
+            className="flex items-center space-x-2 cursor-pointer"
+            onClick={() => navigate('/')}
+          >
             <div className="bg-blue-600 p-2 rounded-lg">
               <Pill className="h-6 w-6 text-white" />
             </div>
@@ -42,10 +43,10 @@ export default function Header({ onNavigate, currentPage }: HeaderProps) {
           <nav className="hidden md:flex space-x-1">
             {navItems.map((item) => (
               <button
-                key={item.id}
-                onClick={() => onNavigate(item.id)}
+                key={item.path}
+                onClick={() => navigate(item.path)}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  currentPage === item.id
+                  location.pathname === item.path
                     ? 'bg-blue-600 text-white'
                     : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
                 }`}
@@ -57,18 +58,13 @@ export default function Header({ onNavigate, currentPage }: HeaderProps) {
 
           <div className="flex items-center space-x-4">
             {user && (
-              <>
-                <span className="hidden md:block text-sm text-gray-600">
-                  {user.email}
-                </span>
-                <button
-                  onClick={handleSignOut}
-                  className="hidden md:flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span>Sign Out</span>
-                </button>
-              </>
+              <button
+                onClick={handleSignOut}
+                className="hidden md:flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Sign Out</span>
+              </button>
             )}
 
             <button
@@ -85,13 +81,13 @@ export default function Header({ onNavigate, currentPage }: HeaderProps) {
             <nav className="flex flex-col space-y-2">
               {navItems.map((item) => (
                 <button
-                  key={item.id}
+                  key={item.path}
                   onClick={() => {
-                    onNavigate(item.id);
+                    navigate(item.path);
                     setMobileMenuOpen(false);
                   }}
                   className={`px-4 py-2 rounded-lg font-medium text-left transition-colors ${
-                    currentPage === item.id
+                    location.pathname === item.path
                       ? 'bg-blue-600 text-white'
                       : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
                   }`}
@@ -99,13 +95,15 @@ export default function Header({ onNavigate, currentPage }: HeaderProps) {
                   {item.label}
                 </button>
               ))}
-              <button
-                onClick={handleSignOut}
-                className="flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-              >
-                <LogOut className="h-4 w-4" />
-                <span>Sign Out</span>
-              </button>
+              {user && (
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Sign Out</span>
+                </button>
+              )}
             </nav>
           </div>
         )}
