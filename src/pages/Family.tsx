@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { Plus, Users, Trash2, FileText } from "lucide-react";
+import { Plus, Users, Trash2, FileText, Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import DeleteFamilyMember from "../components/DeleteFamilyMember";
 
 interface FamilyMember {
   id: number;
@@ -34,20 +35,6 @@ export default function Family() {
       console.error("❌ Error fetching family members:", err);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this family member?")) return;
-    try {
-      await fetch(`http://localhost:4000/api/family-members/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchFamilyMembers();
-    } catch (err) {
-      console.error("❌ Error deleting family member:", err);
-      alert("Failed to delete family member.");
     }
   };
 
@@ -84,19 +71,30 @@ export default function Family() {
                   <Users className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
-                  <p className="text-blue-600 text-sm font-medium">{member.relation}</p>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    {member.name}
+                  </h3>
+                  <p className="text-blue-600 text-sm font-medium">
+                    {member.relation}
+                  </p>
                   <p className="text-gray-600 text-sm font-medium capitalize">
                     {member.gender}
                   </p>
                 </div>
               </div>
-              <button
-                onClick={() => handleDelete(member.id)}
-                className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => navigate(`/edit-family-member/${member.id}`)}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                >
+                  <Edit className="h-4 w-4 " />
+                </button>
+
+                <DeleteFamilyMember
+                  id={member.id}
+                  onDeleted={fetchFamilyMembers}
+                />
+              </div>
             </div>
 
             <button

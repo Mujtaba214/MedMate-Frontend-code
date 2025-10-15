@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FileText, Trash2 } from "lucide-react";
+import { FileText, Trash2, Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface Prescription {
   id: number;
@@ -8,7 +9,7 @@ interface Prescription {
   dosage: string;
   duration: string;
   doctor: string;
-  image_url?: string; // use image_url from backend
+  image_url?: string;
   created_at?: string;
 }
 
@@ -18,6 +19,7 @@ interface Props {
 
 const PrescriptionList: React.FC<Props> = ({ familyId }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const token =
     (user && (user as any).token) ||
     localStorage.getItem("token") ||
@@ -57,6 +59,7 @@ const PrescriptionList: React.FC<Props> = ({ familyId }) => {
       fetchPrescriptions();
     } catch (error) {
       console.error("❌ Error deleting prescription:", error);
+      alert("Failed to delete prescription.");
     }
   };
 
@@ -89,18 +92,25 @@ const PrescriptionList: React.FC<Props> = ({ familyId }) => {
                 <h3 className="font-bold text-lg text-gray-800 flex items-center gap-2">
                   <FileText className="text-blue-600 w-5 h-5" /> {p.medicine}
                 </h3>
-                <button
-                  onClick={() => handleDelete(p.id)}
-                  className="text-red-600 hover:bg-red-50 rounded-lg p-2"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => navigate(`/edit-prescription/${p.id}`)}
+                    className="text-blue-600 hover:bg-blue-50 rounded-lg p-2"
+                  >
+                    <Edit className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(p.id)}
+                    className="text-red-600 hover:bg-red-50 rounded-lg p-2"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
               <p className="text-sm text-gray-600"><strong>Dosage:</strong> {p.dosage}</p>
               <p className="text-sm text-gray-600"><strong>Duration:</strong> {p.duration}</p>
               <p className="text-sm text-gray-600"><strong>Doctor:</strong> {p.doctor}</p>
 
-              {/* Display Image */}
               {p.image_url && (
                 <img
                   src={`http://localhost:4000/${p.image_url}`}

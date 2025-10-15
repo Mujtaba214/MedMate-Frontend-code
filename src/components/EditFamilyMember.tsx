@@ -1,6 +1,6 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const API_URL = "http://localhost:4000/api/family/";
 
@@ -10,13 +10,32 @@ interface FamilyMemberForm {
   gender: string;
 }
 
-const AddFamilyMember: React.FC = () => {
+const EditFamilyMember: React.FC = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FamilyMemberForm>({
     name: "",
     relation: "",
     gender: "",
   });
+
+  useEffect(() => {
+    fetchMember();
+  }, [id]);
+
+  const fetchMember = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(API_URL, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const member = res.data.find((m: any) => m.id === Number(id));
+      if (member) setFormData(member);
+    } catch (error) {
+      console.error("❌ Error fetching family member:", error);
+    }
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData((prev) => ({
@@ -29,29 +48,20 @@ const AddFamilyMember: React.FC = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("User not authenticated");
-
-      const data = {
-        name: formData.name,
-        relation: formData.relation,
-        gender: formData.gender,
-      };
-
-      await axios.post(API_URL, data, {
+      await axios.put(`${API_URL}${id}`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      alert("✅ Family member added successfully!");
+      alert("✅ Family member updated successfully!");
       navigate("/family");
     } catch (err) {
-      console.error("❌ Error adding family member:", err);
-      alert("Failed to add family member.");
+      console.error("❌ Error updating family member:", err);
+      alert("Failed to update family member.");
     }
   };
 
   return (
     <div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-md mt-8">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Add Family Member</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Edit Family Member</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
@@ -95,7 +105,7 @@ const AddFamilyMember: React.FC = () => {
             type="submit"
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
           >
-            Add Family Member
+            Update
           </button>
         </div>
       </form>
@@ -103,4 +113,4 @@ const AddFamilyMember: React.FC = () => {
   );
 };
 
-export default AddFamilyMember;
+export default EditFamilyMember;
