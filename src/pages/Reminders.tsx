@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from "react";
-import { Bell, Plus, Trash2 } from "lucide-react";
+import { Bell, Plus, Trash2, Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { Reminder } from "../types/Reminder";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +24,6 @@ export default function Reminders() {
       const data = await res.json();
       console.log("📦 Reminder API response:", data);
 
-      // ✅ Backend sends { success: true, data: [...] }
       if (data.success && Array.isArray(data.data)) {
         setReminders(data.data);
       } else {
@@ -107,12 +105,25 @@ export default function Reminders() {
                     </span>
                   )}
                 </div>
-                <button
-                  onClick={() => handleDelete(r.id)}
-                  className="text-red-600 hover:bg-red-50 rounded-lg p-2"
-                >
-                  <Trash2 className="h-5 w-5" />
-                </button>
+
+                {/* Action Buttons */}
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => navigate(`/edit-reminder/${r.id}`)}
+                    className="text-blue-600 hover:bg-blue-50 rounded-lg p-2"
+                    title="Edit Reminder"
+                  >
+                    <Edit className="h-5 w-5" />
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(r.id)}
+                    className="text-red-600 hover:bg-red-50 rounded-lg p-2"
+                    title="Delete Reminder"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -121,4 +132,3 @@ export default function Reminders() {
     </div>
   );
 }
-

@@ -23,20 +23,27 @@ export default function Family() {
     if (token) fetchFamilyMembers();
   }, [token]);
 
-  const fetchFamilyMembers = async () => {
-    try {
-      const res = await fetch(`http://localhost:4000/api/family`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      console.log("✅ Family members fetched:", data);
-      setFamilyMembers(data || []);
-    } catch (err) {
-      console.error("❌ Error fetching family members:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchFamilyMembers = async () => {
+  try {
+    const res = await fetch(`http://localhost:4000/api/family`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await res.json();
+    console.log("✅ Family members fetched:", data);
+
+    const membersArray = Array.isArray(data)
+      ? data
+      : data.data || data.familyMembers || [];
+
+    setFamilyMembers(membersArray);
+  } catch (err) {
+    console.error("❌ Error fetching family members:", err);
+    setFamilyMembers([]); // ensure array even on error
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   if (loading) {
     return (

@@ -23,7 +23,7 @@ export default function Header() {
     { path: '/prescriptions', label: 'Prescriptions' },
     { path: '/reminders', label: 'Reminders' },
     { path: '/family', label: 'Family' },
-    { path: '/profile', label: 'Profile' },
+    // { path: '/profile', label: 'Profile' },
   ];
 
   return (
