@@ -125,7 +125,7 @@ const AddPrescription: React.FC = () => {
           value={formData.medicine}
           onChange={handleChange}
           className="w-full border p-2 rounded-md"
-          required
+          // required
         />
         <input
           type="text"
@@ -134,7 +134,7 @@ const AddPrescription: React.FC = () => {
           value={formData.dosage}
           onChange={handleChange}
           className="w-full border p-2 rounded-md"
-          required
+          // required
         />
         <input
           type="text"
@@ -143,7 +143,7 @@ const AddPrescription: React.FC = () => {
           value={formData.duration}
           onChange={handleChange}
           className="w-full border p-2 rounded-md"
-          required
+          // required
         />
         <input
           type="text"
@@ -152,7 +152,7 @@ const AddPrescription: React.FC = () => {
           value={formData.doctor}
           onChange={handleChange}
           className="w-full border p-2 rounded-md"
-          required
+          // required
         />
 
         <select

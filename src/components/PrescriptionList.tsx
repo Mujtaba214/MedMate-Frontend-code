@@ -73,7 +73,7 @@ const PrescriptionList: React.FC<Props> = ({ familyId }) => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between mb-4">
-        <h2 className="text-xl font-semibold text-gray-800">Family Prescriptions</h2>
+        <h2 className="text-xl font-semibold text-gray-800">Family/Caregivers Prescriptions</h2>
         <a
           href="/add-prescription"
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"

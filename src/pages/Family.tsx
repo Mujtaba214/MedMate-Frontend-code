@@ -66,7 +66,7 @@ const fetchFamilyMembers = async () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {familyMembers ? <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {familyMembers.map((member) => (
           <div
             key={member.id}
@@ -113,7 +113,9 @@ const fetchFamilyMembers = async () => {
             </button>
           </div>
         ))}
-      </div>
+      </div>: (
+        <p className="text-gray-600">No family members found. Please add one.</p>
+      )}
     </div>
   );
 }

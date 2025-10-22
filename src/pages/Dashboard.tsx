@@ -34,7 +34,9 @@ export default function Dashboard() {
     upcomingReminders: 0,
     familyMembers: 0,
   });
-  const [upcomingReminders, setUpcomingReminders] = useState<UpcomingReminder[]>([]);
+  const [upcomingReminders, setUpcomingReminders] = useState<
+    UpcomingReminder[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,15 +54,24 @@ export default function Dashboard() {
       const today = new Date().toISOString().split("T")[0];
 
       const [prescriptionsRes, familyRes, remindersRes] = await Promise.all([
-        axios.get(`http://localhost:4000/api/prescriptions/${user.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get(`http://localhost:4000/api/family/${user.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get(`http://localhost:4000/api/reminders/${user.id}?date=${today}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
+        axios.get(
+          `https://med-mate-backend-code-mx4z.vercel.app/api/prescriptions/${user.id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        ),
+        axios.get(
+          `https://med-mate-backend-code-mx4z.vercel.app/api/family/${user.id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        ),
+        axios.get(
+          `https://med-mate-backend-code-mx4z.vercel.app/api/reminders/${user.id}?date=${today}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        ),
       ]);
 
       const prescriptions = prescriptionsRes.data || [];
@@ -96,10 +107,34 @@ export default function Dashboard() {
   };
 
   const statCards = [
-    { icon: Pill, label: "Total Prescriptions", value: stats.totalPrescriptions, bgColor: "bg-blue-50", textColor: "text-blue-600" },
-    { icon: TrendingUp, label: "Active Prescriptions", value: stats.activePrescriptions, bgColor: "bg-green-50", textColor: "text-green-600" },
-    { icon: Clock, label: "Upcoming Reminders", value: stats.upcomingReminders, bgColor: "bg-orange-50", textColor: "text-orange-600" },
-    { icon: Users, label: "Family Members", value: stats.familyMembers, bgColor: "bg-purple-50", textColor: "text-purple-600" },
+    {
+      icon: Pill,
+      label: "Total Prescriptions",
+      value: stats.totalPrescriptions,
+      bgColor: "bg-blue-50",
+      textColor: "text-blue-600",
+    },
+    {
+      icon: TrendingUp,
+      label: "Active Prescriptions",
+      value: stats.activePrescriptions,
+      bgColor: "bg-green-50",
+      textColor: "text-green-600",
+    },
+    {
+      icon: Clock,
+      label: "Upcoming Reminders",
+      value: stats.upcomingReminders,
+      bgColor: "bg-orange-50",
+      textColor: "text-orange-600",
+    },
+    {
+      icon: Users,
+      label: "Family Members",
+      value: stats.familyMembers,
+      bgColor: "bg-purple-50",
+      textColor: "text-purple-600",
+    },
   ];
 
   if (loading) {
@@ -112,20 +147,28 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Welcome back! Here's your medication overview.</p>
+        <p className="text-gray-600 mt-2">
+          Welcome back! Here's your medication overview.
+        </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+          <div
+            key={index}
+            className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow"
+          >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm font-medium">{stat.label}</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
+                <p className="text-gray-600 text-sm font-medium">
+                  {stat.label}
+                </p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">
+                  {stat.value}
+                </p>
               </div>
               <div className={`${stat.bgColor} p-3 rounded-lg`}>
                 <stat.icon className={`h-8 w-8 ${stat.textColor}`} />
@@ -139,7 +182,9 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl shadow-md p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Upcoming Reminders</h2>
+            <h2 className="text-xl font-bold text-gray-900">
+              Upcoming Reminders
+            </h2>
             <button
               onClick={() => navigate("/reminders")}
               className="text-blue-600 hover:text-blue-700 font-medium text-sm"
@@ -170,10 +215,16 @@ export default function Dashboard() {
                     <Clock className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-semibold text-gray-900">{reminder.medication_name}</p>
-                    <p className="text-sm text-gray-600">{reminder.dosage} for {reminder.family_member_name}</p>
+                    <p className="font-semibold text-gray-900">
+                      {reminder.medication_name}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {reminder.dosage} for {reminder.family_member_name}
+                    </p>
                   </div>
-                  <span className="text-blue-600 font-semibold">{reminder.time}</span>
+                  <span className="text-blue-600 font-semibold">
+                    {reminder.time}
+                  </span>
                 </div>
               ))}
             </div>
@@ -182,7 +233,9 @@ export default function Dashboard() {
 
         {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-6">
+            Quick Actions
+          </h2>
           <div className="grid grid-cols-1 gap-3">
             <button
               onClick={() => navigate("/prescriptions")}
@@ -193,7 +246,9 @@ export default function Dashboard() {
               </div>
               <div>
                 <p className="font-semibold text-gray-900">Add Prescription</p>
-                <p className="text-sm text-gray-600">Upload a new prescription</p>
+                <p className="text-sm text-gray-600">
+                  Upload a new prescription
+                </p>
               </div>
             </button>
 
@@ -206,7 +261,9 @@ export default function Dashboard() {
               </div>
               <div>
                 <p className="font-semibold text-gray-900">Set Reminder</p>
-                <p className="text-sm text-gray-600">Schedule medication reminder</p>
+                <p className="text-sm text-gray-600">
+                  Schedule medication reminder
+                </p>
               </div>
             </button>
 
@@ -231,7 +288,9 @@ export default function Dashboard() {
         <div className="flex items-start space-x-3">
           <AlertCircle className="h-6 w-6 text-blue-600 flex-shrink-0 mt-0.5" />
           <div>
-            <h3 className="font-semibold text-blue-900 mb-1">Health Reminder</h3>
+            <h3 className="font-semibold text-blue-900 mb-1">
+              Health Reminder
+            </h3>
             <p className="text-blue-800 text-sm">
               Always consult with your healthcare provider before making any
               changes to your medication schedule. MedMate is a reminder tool

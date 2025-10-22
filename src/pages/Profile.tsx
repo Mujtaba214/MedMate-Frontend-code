@@ -89,7 +89,7 @@ export default function Profile() {
 
       {!editing && profile && (
         <div className="bg-white shadow-md rounded-xl p-6 space-y-4">
-          <div className="flex items-center space-x-3"><User className="h-6 w-6 text-blue-600" /><p className="text-lg font-medium">{profile.name}</p></div>
+          <div className="flex items-center space-x-3"><User className="h-6 w-6 text-blue-600" /><p className="text-lg font-medium">{user?.name}</p></div>
           <div className="flex items-center space-x-3"><Mail className="h-6 w-6 text-blue-600" /><p>{profile.email}</p></div>
           {/* <div className="flex items-center space-x-3"><Phone className="h-6 w-6 text-blue-600" /><p>{profile.phone}</p></div> */}
           {/* <div className="flex items-center space-x-3"><Calendar className="h-6 w-6 text-blue-600" /><p>DOB: {new Date(profile.date_of_birth).toLocaleDateString("en-GB")}</p></div> */}

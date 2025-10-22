@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // 🔹 SIGN UP
   const signUp = async (email: string, password: string, fullName: string) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/signup", {
+      const res = await axios.post("http://localhost:4000/api/signup", {
         name: fullName,
         email,
         password,
@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // 🔹 SIGN IN
   const signIn = async (email: string, password: string) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/login", {
+      const res = await axios.post("api/login", {
         email,
         password,
       });
