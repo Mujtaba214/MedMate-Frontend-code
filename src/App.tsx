@@ -20,7 +20,6 @@ import EditFamilyMember from "./components/EditFamilyMember";
 import AddReminder from "./components/AddReminder";
 import EditReminder from "./components/EditReminder";
 
-// Wrapper to conditionally render Header and Footer
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const hidePaths = ["/login", "/signup"];
@@ -40,7 +39,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 function App() {
   return (
-    // <Router>
     <Layout>
       <Routes>
         <Route path="/" element={<Dashboard />} />
@@ -58,7 +56,6 @@ function App() {
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </Layout>
-    // {/* </Router> */}
   );
 }
 

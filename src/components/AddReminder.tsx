@@ -14,6 +14,8 @@ export default function AddReminder() {
     prescription_id: "",
     reminder_time: "",
     note: "",
+    repeat_type: "once",
+    repeat_days: [] as string[],
   });
 
   useEffect(() => {
@@ -110,6 +112,44 @@ export default function AddReminder() {
             required
           />
         </div>
+
+        <div>
+          <label className="block text-gray-700 mb-1">Repeat</label>
+          <select
+            value={form.repeat_type}
+            onChange={(e) =>
+              setForm({ ...form, repeat_type: e.target.value, repeat_days: [] })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          >
+            <option value="once">One Time</option>
+            <option value="daily">Daily</option>
+            <option value="custom">Custom Days</option>
+          </select>
+        </div>
+
+        {form.repeat_type === "custom" && (
+          <div>
+            <label className="block text-gray-700 mb-1">Select Days</label>
+            <div className="grid grid-cols-3 gap-2">
+              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+                <label key={day} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={form.repeat_days.includes(day)}
+                    onChange={(e) => {
+                      const newDays = e.target.checked
+                        ? [...form.repeat_days, day]
+                        : form.repeat_days.filter((d) => d !== day);
+                      setForm({ ...form, repeat_days: newDays });
+                    }}
+                  />
+                  <span>{day}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div>
           <label className="block text-gray-700 mb-1">Note</label>

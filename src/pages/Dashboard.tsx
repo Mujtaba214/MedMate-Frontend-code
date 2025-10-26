@@ -55,19 +55,19 @@ export default function Dashboard() {
 
       const [prescriptionsRes, familyRes, remindersRes] = await Promise.all([
         axios.get(
-          `https://med-mate-backend-code-mx4z.vercel.app/api/prescriptions/${user.id}`,
+          `http://localhost:4000/api/prescriptions/${user.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          `https://med-mate-backend-code-mx4z.vercel.app/api/family/${user.id}`,
+          `http://localhost:4000/api/family/${user.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          `https://med-mate-backend-code-mx4z.vercel.app/api/reminders/${user.id}?date=${today}`,
+          `http://localhost:4000/api/reminders/${user.id}?date=${today}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -154,8 +154,7 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat, index) => (
           <div
             key={index}
@@ -176,12 +175,11 @@ export default function Dashboard() {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
 
-      {/* Upcoming Reminders */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl shadow-md p-6">
-          <div className="flex items-center justify-between mb-6">
+          {/* <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-900">
               Upcoming Reminders
             </h2>
@@ -191,7 +189,7 @@ export default function Dashboard() {
             >
               View All
             </button>
-          </div>
+          </div> */}
 
           {upcomingReminders.length === 0 ? (
             <div className="text-center py-8">
@@ -231,7 +229,6 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow-md p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
             Quick Actions
@@ -283,7 +280,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Health Reminder */}
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
         <div className="flex items-start space-x-3">
           <AlertCircle className="h-6 w-6 text-blue-600 flex-shrink-0 mt-0.5" />

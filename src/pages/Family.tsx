@@ -38,7 +38,7 @@ const fetchFamilyMembers = async () => {
     setFamilyMembers(membersArray);
   } catch (err) {
     console.error("❌ Error fetching family members:", err);
-    setFamilyMembers([]); // ensure array even on error
+    setFamilyMembers([]); 
   } finally {
     setLoading(false);
   }

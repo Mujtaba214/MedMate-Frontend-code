@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function EditReminder() {
-  const { id } = useParams(); // reminder ID from URL
+  const { id } = useParams(); 
   const { user } = useAuth();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -23,7 +23,6 @@ export default function EditReminder() {
     fetchReminder();
   }, [id]);
 
-  // ✅ Fetch all family members
   const fetchFamilyMembers = async () => {
     const res = await fetch("http://localhost:4000/api/family", {
       headers: { Authorization: `Bearer ${token}` },
@@ -32,7 +31,6 @@ export default function EditReminder() {
     setFamilyMembers(data || []);
   };
 
-  // ✅ Fetch all prescriptions
   const fetchPrescriptions = async () => {
     const res = await fetch("http://localhost:4000/api/prescriptions", {
       headers: { Authorization: `Bearer ${token}` },
@@ -41,7 +39,6 @@ export default function EditReminder() {
     setPrescriptions(data || []);
   };
 
-  // ✅ Fetch reminder details to prefill form
   const fetchReminder = async () => {
     try {
       const res = await fetch(`http://localhost:4000/api/reminders/${id}`, {
@@ -54,7 +51,7 @@ export default function EditReminder() {
           family_member_id: data.data.family_member_id || "",
           prescription_id: data.data.prescription_id || "",
           reminder_time: data.data.reminder_time
-            ? new Date(data.data.reminder_time).toISOString().slice(0, 16) // for datetime-local input
+            ? new Date(data.data.reminder_time).toISOString().slice(0, 16) 
             : "",
           note: data.data.note || "",
         });
@@ -64,7 +61,6 @@ export default function EditReminder() {
     }
   };
 
-  // ✅ Handle form submission (PUT request)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -93,7 +89,6 @@ export default function EditReminder() {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Family Member */}
         <div>
           <label className="block text-gray-700 mb-1">Family Member</label>
           <select
@@ -112,7 +107,6 @@ export default function EditReminder() {
           </select>
         </div>
 
-        {/* Prescription */}
         <div>
           <label className="block text-gray-700 mb-1">Prescription</label>
           <select
@@ -131,7 +125,6 @@ export default function EditReminder() {
           </select>
         </div>
 
-        {/* Reminder Time */}
         <div>
           <label className="block text-gray-700 mb-1">Reminder Time</label>
           <input
@@ -145,16 +138,7 @@ export default function EditReminder() {
           />
         </div>
 
-        {/* Note */}
-        <div>
-          <label className="block text-gray-700 mb-1">Note</label>
-          <textarea
-            value={form.note}
-            onChange={(e) => setForm({ ...form, note: e.target.value })}
-            className="w-full border rounded-lg px-3 py-2"
-            placeholder="Optional note..."
-          />
-        </div>
+        
 
         <button
           type="submit"

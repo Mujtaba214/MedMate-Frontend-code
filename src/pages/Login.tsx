@@ -16,7 +16,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post("https://med-mate-backend-code-mx4z.vercel.app/api/auth/login", {
+      const response = await axios.post("http://localhost:4000/api/auth/login", {
         email,
         password,
       });
@@ -24,7 +24,6 @@ export default function Login() {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.userDetails));
 
-      // Navigate to dashboard after login
       navigate("/");
     } catch (err: any) {
       setError(

@@ -83,7 +83,7 @@ const EditPrescription: React.FC = () => {
       }
 
       alert("✅ Prescription updated successfully!");
-      navigate("/prescriptions");
+      navigate(-1);
     } catch (error) {
       console.error("Error updating prescription:", error);
       alert("❌ Failed to update prescription");
@@ -98,7 +98,6 @@ const EditPrescription: React.FC = () => {
         </h2>
 
         <form onSubmit={handleUpdate} className="space-y-5">
-          {/* Medicine */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">
               Medicine Name
@@ -114,7 +113,6 @@ const EditPrescription: React.FC = () => {
             />
           </div>
 
-          {/* Dosage */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">
               Dosage
@@ -130,7 +128,6 @@ const EditPrescription: React.FC = () => {
             />
           </div>
 
-          {/* Duration */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">
               Duration
@@ -146,7 +143,6 @@ const EditPrescription: React.FC = () => {
             />
           </div>
 
-          {/* Doctor */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">
               Doctor Name
@@ -162,7 +158,6 @@ const EditPrescription: React.FC = () => {
             />
           </div>
 
-          {/* Image Upload */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">
               Prescription Image
@@ -175,7 +170,6 @@ const EditPrescription: React.FC = () => {
             />
           </div>
 
-          {/* Image Preview */}
           {preview && (
             <div className="mt-4 flex justify-center">
               <img
@@ -186,7 +180,6 @@ const EditPrescription: React.FC = () => {
             </div>
           )}
 
-          {/* Update Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-all duration-200 shadow-md"
