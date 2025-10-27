@@ -3,24 +3,26 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function EditReminder() {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const { user } = useAuth();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
   const [familyMembers, setFamilyMembers] = useState<any[]>([]);
   const [prescriptions, setPrescriptions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [form, setForm] = useState({
     family_member_id: "",
     prescription_id: "",
     reminder_time: "",
     note: "",
+    repeat_type: "once",
+    repeat_days: [] as string[],
   });
 
   useEffect(() => {
-    fetchFamilyMembers();
-    fetchPrescriptions();
-    fetchReminder();
+    Promise.all([fetchFamilyMembers(), fetchPrescriptions(), fetchReminder()]);
   }, [id]);
 
   const fetchFamilyMembers = async () => {
@@ -44,20 +46,29 @@ export default function EditReminder() {
       const res = await fetch(`http://localhost:4000/api/reminders/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await res.json();
+      const json = await res.json();
+      const data = json?.data || json; // support both {data: {...}} and {...}
 
-      if (data?.data) {
+      if (data) {
         setForm({
-          family_member_id: data.data.family_member_id || "",
-          prescription_id: data.data.prescription_id || "",
-          reminder_time: data.data.reminder_time
-            ? new Date(data.data.reminder_time).toISOString().slice(0, 16) 
+          family_member_id: data.family_member_id?.toString() || "",
+          prescription_id: data.prescription_id?.toString() || "",
+          reminder_time: data.reminder_time
+            ? new Date(data.reminder_time).toISOString().slice(0, 16)
             : "",
-          note: data.data.note || "",
+          note: data.note || "",
+          repeat_type: data.repeat_type || "once",
+          repeat_days: Array.isArray(data.repeat_days)
+            ? data.repeat_days
+            : typeof data.repeat_days === "string"
+            ? data.repeat_days.replace(/[{}"]/g, "").split(",").filter(Boolean)
+            : [],
         });
       }
     } catch (err) {
       console.error("❌ Error fetching reminder:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,6 +93,12 @@ export default function EditReminder() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="text-center mt-10 text-gray-600">Loading reminder...</div>
+    );
+  }
+
   return (
     <div className="max-w-lg mx-auto bg-white shadow-md rounded-xl p-8">
       <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
@@ -89,6 +106,7 @@ export default function EditReminder() {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Family Member */}
         <div>
           <label className="block text-gray-700 mb-1">Family Member</label>
           <select
@@ -107,6 +125,7 @@ export default function EditReminder() {
           </select>
         </div>
 
+        {/* Prescription */}
         <div>
           <label className="block text-gray-700 mb-1">Prescription</label>
           <select
@@ -125,6 +144,7 @@ export default function EditReminder() {
           </select>
         </div>
 
+        {/* Reminder Time */}
         <div>
           <label className="block text-gray-700 mb-1">Reminder Time</label>
           <input
@@ -138,8 +158,58 @@ export default function EditReminder() {
           />
         </div>
 
-        
+        {/* Repeat Type */}
+        <div>
+          <label className="block text-gray-700 mb-1">Repeat</label>
+          <select
+            value={form.repeat_type}
+            onChange={(e) =>
+              setForm({ ...form, repeat_type: e.target.value, repeat_days: [] })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          >
+            <option value="once">One Time</option>
+            <option value="daily">Daily</option>
+            <option value="custom">Custom Days</option>
+          </select>
+        </div>
 
+        {/* Custom Days */}
+        {form.repeat_type === "custom" && (
+          <div>
+            <label className="block text-gray-700 mb-1">Select Days</label>
+            <div className="grid grid-cols-3 gap-2">
+              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+                <label key={day} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={form.repeat_days.includes(day)}
+                    onChange={(e) => {
+                      const newDays = e.target.checked
+                        ? [...form.repeat_days, day]
+                        : form.repeat_days.filter((d) => d !== day);
+                      setForm({ ...form, repeat_days: newDays });
+                    }}
+                  />
+                  <span>{day}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Note */}
+        <div>
+          <label className="block text-gray-700 mb-1">Note</label>
+          <textarea
+            value={form.note}
+            onChange={(e) => setForm({ ...form, note: e.target.value })}
+            className="w-full border rounded-lg px-3 py-2"
+            placeholder="Optional note..."
+          />
+        </div>
+
+        {/* Submit */}
         <button
           type="submit"
           className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
