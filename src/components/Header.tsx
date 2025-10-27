@@ -63,7 +63,7 @@ export default function Header() {
               </nav>
 
               <div className="flex items-center space-x-4">
-                {user && (
+                {/* {user && ( */}
                   <button
                     onClick={handleSignOut}
                     className="hidden md:flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
@@ -71,7 +71,7 @@ export default function Header() {
                     <LogOut className="h-4 w-4" />
                     <span>Sign Out</span>
                   </button>
-                )}
+                {/* // )} */}
 
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
