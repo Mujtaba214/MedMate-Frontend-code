@@ -31,7 +31,7 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:4000/api/auth/signup", {
+      const res = await axios.post("https://med-mate-backend-code.vercel.app/api/auth/signup", {
         name: fullName,
         email,
         password,

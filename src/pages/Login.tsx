@@ -16,7 +16,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:4000/api/auth/login", {
+      const response = await axios.post("https://med-mate-backend-code.vercel.app/api/auth/login", {
         email,
         password,
       });

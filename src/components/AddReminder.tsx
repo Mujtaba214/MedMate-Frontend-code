@@ -24,7 +24,7 @@ export default function AddReminder() {
   }, []);
 
   const fetchFamilyMembers = async () => {
-    const res = await fetch("http://localhost:4000/api/family", {
+    const res = await fetch("https://med-mate-backend-code.vercel.app/api/family", {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -32,7 +32,7 @@ export default function AddReminder() {
   };
 
   const fetchPrescriptions = async () => {
-    const res = await fetch("http://localhost:4000/api/prescriptions", {
+    const res = await fetch("https://med-mate-backend-code.vercel.app/api/prescriptions", {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -42,7 +42,7 @@ export default function AddReminder() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await fetch("http://localhost:4000/api/reminders", {
+      await fetch("https://med-mate-backend-code.vercel.app/api/reminders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
