@@ -39,7 +39,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 function App() {
   return (
-    <Router>
+    // <Router>
       <Layout>
         <Routes>
           {/* Public routes */}
@@ -63,7 +63,6 @@ function App() {
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>
       </Layout>
-    </Router>
   );
 }
 
