@@ -25,7 +25,7 @@ export default function Family() {
 
 const fetchFamilyMembers = async () => {
   try {
-    const res = await fetch(`https://med-mate-backend-code.vercel.app/api/family`, {
+    const res = await fetch(`http://localhost:4000/api/family`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();

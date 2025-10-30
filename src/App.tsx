@@ -19,11 +19,11 @@ import EditPrescription from "./components/EditPrescription";
 import EditFamilyMember from "./components/EditFamilyMember";
 import AddReminder from "./components/AddReminder";
 import EditReminder from "./components/EditReminder";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const hidePaths = ["/login", "/signup"];
-
   const shouldHide = hidePaths.includes(location.pathname);
 
   return (
@@ -39,23 +39,31 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/prescriptions" element={<Prescriptions />} />
-        <Route path="/add-prescription" element={<AddPrescription />} />
-        <Route path="/add-reminder" element={<AddReminder />} />
-        <Route path="/add-family-member" element={<AddFamilyMember />} />
-        <Route path="/edit-family-member/:id" element={<EditFamilyMember />} />
-        <Route path="/edit-prescription/:id" element={<EditPrescription />} />
-        <Route path="/edit-reminder/:id" element={<EditReminder />} />
-        <Route path="/reminders" element={<Reminders />} />
-        <Route path="/family" element={<Family />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
-    </Layout>
+    <Router>
+      <Layout>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+
+          {/* Default redirect */}
+          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+
+          {/* Protected routes */}
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/prescriptions" element={<ProtectedRoute><Prescriptions /></ProtectedRoute>} />
+          <Route path="/add-prescription" element={<ProtectedRoute><AddPrescription /></ProtectedRoute>} />
+          <Route path="/add-reminder" element={<ProtectedRoute><AddReminder /></ProtectedRoute>} />
+          <Route path="/add-family-member" element={<ProtectedRoute><AddFamilyMember /></ProtectedRoute>} />
+          <Route path="/edit-family-member/:id" element={<ProtectedRoute><EditFamilyMember /></ProtectedRoute>} />
+          <Route path="/edit-prescription/:id" element={<ProtectedRoute><EditPrescription /></ProtectedRoute>} />
+          <Route path="/edit-reminder/:id" element={<ProtectedRoute><EditReminder /></ProtectedRoute>} />
+          <Route path="/reminders" element={<ProtectedRoute><Reminders /></ProtectedRoute>} />
+          <Route path="/family" element={<ProtectedRoute><Family /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        </Routes>
+      </Layout>
+    </Router>
   );
 }
 

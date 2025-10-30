@@ -26,7 +26,7 @@ export default function Profile() {
     gender: "",
   });
 
-  const API_BASE = "https://med-mate-backend-code.vercel.app/api";
+  const API_BASE = "http://localhost:4000/api";
 
   useEffect(() => {
     if (token) fetchProfile();

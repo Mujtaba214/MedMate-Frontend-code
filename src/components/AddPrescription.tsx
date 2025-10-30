@@ -42,7 +42,7 @@ const AddPrescription: React.FC = () => {
     const fetchFamilyMembers = async () => {
       if (!token) return;
       try {
-        const response = await axios.get("https://med-mate-backend-code.vercel.app/api/family", {
+        const response = await axios.get("http://localhost:4000/api/family", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFamilyMembers(response.data);
@@ -80,7 +80,7 @@ const AddPrescription: React.FC = () => {
       if (image) data.append("image", image);
 
       const response = await axios.post(
-        "https://med-mate-backend-code.vercel.app/api/prescriptions",
+        "http://localhost:4000/api/prescriptions",
         data,
         {
           headers: {

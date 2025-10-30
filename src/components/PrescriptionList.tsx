@@ -37,7 +37,7 @@ const PrescriptionList: React.FC<Props> = ({ familyId }) => {
     try {
       setLoading(true);
       const res = await fetch(
-        `https://med-mate-backend-code.vercel.app/api/prescriptions/family/${familyId}`,
+        `http://localhost:4000/api/prescriptions/family/${familyId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();
@@ -52,7 +52,7 @@ const PrescriptionList: React.FC<Props> = ({ familyId }) => {
   const handleDelete = async (id: number) => {
     if (!confirm("Are you sure you want to delete this prescription?")) return;
     try {
-      await fetch(`https://med-mate-backend-code.vercel.app/api/prescriptions/${id}`, {
+      await fetch(`http://localhost:4000/api/prescriptions/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -113,7 +113,7 @@ const PrescriptionList: React.FC<Props> = ({ familyId }) => {
 
               {p.image_url && (
                 <img
-                  src={`https://med-mate-backend-code.vercel.app/${p.image_url}`}
+                  src={`http://localhost:4000/${p.image_url}`}
                   alt="Prescription"
                   className="w-full h-40 object-cover rounded-lg mt-3"
                 />

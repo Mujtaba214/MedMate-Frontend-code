@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "https://med-mate-backend-code.vercel.app/api/family/";
+const API_URL = "http://localhost:4000/api/family/";
 
 interface FamilyMemberForm {
   name: string;

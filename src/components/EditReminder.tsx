@@ -26,7 +26,7 @@ export default function EditReminder() {
   }, [id]);
 
   const fetchFamilyMembers = async () => {
-    const res = await fetch("https://med-mate-backend-code.vercel.app/api/family", {
+    const res = await fetch("http://localhost:4000/api/family", {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -34,7 +34,7 @@ export default function EditReminder() {
   };
 
   const fetchPrescriptions = async () => {
-    const res = await fetch("https://med-mate-backend-code.vercel.app/api/prescriptions", {
+    const res = await fetch("http://localhost:4000/api/prescriptions", {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -43,7 +43,7 @@ export default function EditReminder() {
 
   const fetchReminder = async () => {
     try {
-      const res = await fetch(`https://med-mate-backend-code.vercel.app/api/reminders/${id}`, {
+      const res = await fetch(`http://localhost:4000/api/reminders/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const json = await res.json();
@@ -75,7 +75,7 @@ export default function EditReminder() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(`https://med-mate-backend-code.vercel.app/api/reminders/${id}`, {
+      const res = await fetch(`http://localhost:4000/api/reminders/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

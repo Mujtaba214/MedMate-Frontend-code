@@ -12,7 +12,7 @@ const DeleteFamilyMember: React.FC<DeleteFamilyMemberProps> = ({ id, onDeleted }
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`https://med-mate-backend-code.vercel.app/api/family/${id}`, {
+      await axios.delete(`http://localhost:4000/api/family/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
