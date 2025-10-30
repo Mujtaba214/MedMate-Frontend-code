@@ -18,7 +18,7 @@ export default function Reminders() {
   const fetchReminders = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:4000/api/reminders", {
+      const res = await fetch("https://med-mate-backend-code.vercel.app/api/reminders", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -41,7 +41,7 @@ export default function Reminders() {
   const handleDelete = async (id: number) => {
     if (!confirm("Are you sure you want to delete this reminder?")) return;
     try {
-      const res = await fetch(`http://localhost:4000/api/reminders/${id}`, {
+      const res = await fetch(`https://med-mate-backend-code.vercel.app/api/reminders/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

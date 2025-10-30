@@ -55,19 +55,19 @@ export default function Dashboard() {
 
       const [prescriptionsRes, familyRes, remindersRes] = await Promise.all([
         axios.get(
-          `http://localhost:4000/api/prescriptions/${user.id}`,
+          `https://med-mate-backend-code.vercel.app/api/prescriptions/${user.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          `http://localhost:4000/api/family/${user.id}`,
+          `https://med-mate-backend-code.vercel.app/api/family/${user.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          `http://localhost:4000/api/reminders/${user.id}?date=${today}`,
+          `https://med-mate-backend-code.vercel.app/api/reminders/${user.id}?date=${today}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

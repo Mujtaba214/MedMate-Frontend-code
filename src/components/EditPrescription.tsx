@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
-const API_URL = "http://localhost:4000/api/prescriptions";
+const API_URL = "https://med-mate-backend-code.vercel.app/api/prescriptions";
 
 const EditPrescription: React.FC = () => {
   const { id } = useParams();
@@ -34,7 +34,7 @@ const EditPrescription: React.FC = () => {
         });
 
         if (data.image_url) {
-          setPreview(`http://localhost:4000/${data.image_url}`);
+          setPreview(`https://med-mate-backend-code.vercel.app/${data.image_url}`);
         }
       } catch (err) {
         console.error("Error fetching prescription:", err);
@@ -79,7 +79,7 @@ const EditPrescription: React.FC = () => {
       const updated = response.data.data;
 
       if (updated.image_url) {
-        setPreview(`http://localhost:4000/${updated.image_url}`);
+        setPreview(`https://med-mate-backend-code.vercel.app/${updated.image_url}`);
       }
 
       alert("✅ Prescription updated successfully!");
