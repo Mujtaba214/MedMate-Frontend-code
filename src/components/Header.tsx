@@ -25,7 +25,7 @@ export default function Header() {
     // { path: "/prescriptions", label: "Prescriptions" },
     { path: "/reminders", label: "Reminders" },
     { path: "/family", label: "Family" },
-    { path: '/profile', label: 'Profile' },
+    // { path: '/profile', label: 'Profile' },
   ];
 
   return (
@@ -63,13 +63,13 @@ export default function Header() {
               </nav>
 
               <div className="flex items-center space-x-4">
-                  <button
-                    onClick={handleSignOut}
-                    className="hidden md:flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span>Sign Out</span>
-                  </button>
+                <button
+                  onClick={handleSignOut}
+                  className="hidden md:flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Sign Out</span>
+                </button>
 
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
