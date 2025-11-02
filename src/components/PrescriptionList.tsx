@@ -38,7 +38,9 @@ const PrescriptionList: React.FC<Props> = ({ familyId }) => {
       setLoading(true);
       const res = await fetch(
         `https://med-mate-backend-code.vercel.app/api/prescriptions/family/${familyId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       const data = await res.json();
       setPrescriptions(data || []);
@@ -73,7 +75,9 @@ const PrescriptionList: React.FC<Props> = ({ familyId }) => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between mb-4">
-        <h2 className="text-xl font-semibold text-gray-800">Family/Caregivers Prescriptions</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          Family/Caregivers Prescriptions
+        </h2>
         <a
           href="/add-prescription"
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
@@ -87,7 +91,10 @@ const PrescriptionList: React.FC<Props> = ({ familyId }) => {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {prescriptions.map((p) => (
-            <div key={p.id} className="bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition">
+            <div
+              key={p.id}
+              className="bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition"
+            >
               <div className="flex justify-between items-center mb-3">
                 <h3 className="font-bold text-lg text-gray-800 flex items-center gap-2">
                   <FileText className="text-blue-600 w-5 h-5" /> {p.medicine}
@@ -107,15 +114,27 @@ const PrescriptionList: React.FC<Props> = ({ familyId }) => {
                   </button>
                 </div>
               </div>
-              <p className="text-sm text-gray-600"><strong>Dosage:</strong> {p.dosage}</p>
-              <p className="text-sm text-gray-600"><strong>Duration:</strong> {p.duration}</p>
-              <p className="text-sm text-gray-600"><strong>Doctor:</strong> {p.doctor}</p>
 
+              <p className="text-sm text-gray-600">
+                <strong>Dosage:</strong> {p.dosage}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>Duration:</strong> {p.duration}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>Doctor:</strong> {p.doctor}
+              </p>
+
+              {/* ✅ Cloudinary image now used directly */}
               {p.image_url && (
                 <img
-                  src={`https://med-mate-backend-code.vercel.app/${p.image_url}`}
+                  src={p.image_url}
                   alt="Prescription"
-                  className="w-full h-40 object-cover rounded-lg mt-3"
+                  className="w-full h-40 object-cover rounded-lg mt-3 border"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src =
+                      "https://via.placeholder.com/300x200?text=Image+Not+Available";
+                  }}
                 />
               )}
             </div>

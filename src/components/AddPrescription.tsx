@@ -29,7 +29,10 @@ const AddPrescription: React.FC = () => {
     familyId: "",
   });
   const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>("");
   const [message, setMessage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const token =
@@ -38,6 +41,7 @@ const AddPrescription: React.FC = () => {
     localStorage.getItem("authToken") ||
     "";
 
+  // 🔹 Fetch family members
   useEffect(() => {
     const fetchFamilyMembers = async () => {
       if (!token) return;
@@ -53,18 +57,23 @@ const AddPrescription: React.FC = () => {
     fetchFamilyMembers();
   }, [token]);
 
+  // 🔹 Input change handler
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // 🔹 Image file change
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setImage(e.target.files[0]);
+      const file = e.target.files[0];
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file)); // show local preview
     }
   };
 
+  // 🔹 Submit form
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!token) {
@@ -73,6 +82,8 @@ const AddPrescription: React.FC = () => {
     }
 
     try {
+      setLoading(true);
+
       const data = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (value) data.append(key, value);
@@ -80,7 +91,7 @@ const AddPrescription: React.FC = () => {
       if (image) data.append("image", image);
 
       const response = await axios.post(
-        "https://med-mate-backend-code.vercel.app/api/prescriptions",
+        "https://med-mate-backend-code.vercel.app/api/prescriptions", // Backend handles Cloudinary upload
         data,
         {
           headers: {
@@ -91,6 +102,7 @@ const AddPrescription: React.FC = () => {
       );
 
       setMessage("✅ Prescription added successfully!");
+      setUploadedImageUrl(response.data.imageUrl || "");
       setFormData({
         medicine: "",
         dosage: "",
@@ -99,8 +111,8 @@ const AddPrescription: React.FC = () => {
         familyId: "",
       });
       setImage(null);
-      console.log("Added prescription:", response.data);
-       navigate("/family")
+      setImagePreview("");
+      setTimeout(() => navigate("/family"), 1500);
     } catch (error: any) {
       console.error("❌ Error adding prescription:", error);
       setMessage(
@@ -108,6 +120,8 @@ const AddPrescription: React.FC = () => {
           ? "Unauthorized: Please log in again."
           : "Failed to add prescription."
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -125,7 +139,6 @@ const AddPrescription: React.FC = () => {
           value={formData.medicine}
           onChange={handleChange}
           className="w-full border p-2 rounded-md"
-          // required
         />
         <input
           type="text"
@@ -134,7 +147,6 @@ const AddPrescription: React.FC = () => {
           value={formData.dosage}
           onChange={handleChange}
           className="w-full border p-2 rounded-md"
-          // required
         />
         <input
           type="text"
@@ -143,7 +155,6 @@ const AddPrescription: React.FC = () => {
           value={formData.duration}
           onChange={handleChange}
           className="w-full border p-2 rounded-md"
-          // required
         />
         <input
           type="text"
@@ -152,7 +163,6 @@ const AddPrescription: React.FC = () => {
           value={formData.doctor}
           onChange={handleChange}
           className="w-full border p-2 rounded-md"
-          // required
         />
 
         <select
@@ -169,6 +179,7 @@ const AddPrescription: React.FC = () => {
           ))}
         </select>
 
+        {/* Image upload input */}
         <input
           type="file"
           accept="image/*"
@@ -176,11 +187,37 @@ const AddPrescription: React.FC = () => {
           className="w-full border p-2 rounded-md"
         />
 
+        {/* Local preview before upload */}
+        {imagePreview && (
+          <div className="text-center mt-3">
+            <img
+              src={imagePreview}
+              alt="Prescription Preview"
+              className="w-48 h-auto rounded-md mx-auto border"
+            />
+          </div>
+        )}
+
+        {/* Cloudinary uploaded image */}
+        {uploadedImageUrl && (
+          <div className="text-center mt-3">
+            <p className="text-sm text-gray-500 mb-2">
+              Uploaded to Cloudinary:
+            </p>
+            <img
+              src={uploadedImageUrl}
+              alt="Prescription Uploaded"
+              className="w-48 h-auto rounded-md mx-auto border"
+            />
+          </div>
+        )}
+
         <button
           type="submit"
+          disabled={loading}
           className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition"
         >
-          Add Prescription
+          {loading ? "Uploading..." : "Add Prescription"}
         </button>
       </form>
 

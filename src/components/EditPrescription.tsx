@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
+// ✅ Use your deployed API URL (replace with your live backend)
 const API_URL = "https://med-mate-backend-code.vercel.app/api/prescriptions";
 
 const EditPrescription: React.FC = () => {
@@ -15,15 +16,18 @@ const EditPrescription: React.FC = () => {
     duration: "",
     doctor: "",
   });
+
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
 
+  // ✅ Fetch Prescription details
   useEffect(() => {
     const fetchPrescription = async () => {
       try {
         const res = await axios.get(`${API_URL}/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+
         const data = res.data;
 
         setFormData({
@@ -33,20 +37,24 @@ const EditPrescription: React.FC = () => {
           doctor: data.doctor,
         });
 
+        // ✅ Cloudinary images already have a full URL
         if (data.image_url) {
-          setPreview(`https://med-mate-backend-code.vercel.app/${data.image_url}`);
+          setPreview(data.image_url);
         }
       } catch (err) {
         console.error("Error fetching prescription:", err);
       }
     };
+
     fetchPrescription();
   }, [id, token]);
 
+  // ✅ Handle Input Changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // ✅ Handle Image Change (Preview)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -55,6 +63,7 @@ const EditPrescription: React.FC = () => {
     }
   };
 
+  // ✅ Handle Update Request
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -66,7 +75,7 @@ const EditPrescription: React.FC = () => {
       form.append("doctor", formData.doctor);
 
       if (image) {
-        form.append("image", image);
+        form.append("image", image); // Multer → Cloudinary handles this
       }
 
       const response = await axios.put(`${API_URL}/${id}`, form, {
@@ -78,8 +87,9 @@ const EditPrescription: React.FC = () => {
 
       const updated = response.data.data;
 
+      // ✅ Update Preview with Cloudinary URL
       if (updated.image_url) {
-        setPreview(`https://med-mate-backend-code.vercel.app/${updated.image_url}`);
+        setPreview(updated.image_url);
       }
 
       alert("✅ Prescription updated successfully!");
@@ -98,6 +108,7 @@ const EditPrescription: React.FC = () => {
         </h2>
 
         <form onSubmit={handleUpdate} className="space-y-5">
+          {/* Medicine Name */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">
               Medicine Name
@@ -113,6 +124,7 @@ const EditPrescription: React.FC = () => {
             />
           </div>
 
+          {/* Dosage */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">
               Dosage
@@ -128,6 +140,7 @@ const EditPrescription: React.FC = () => {
             />
           </div>
 
+          {/* Duration */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">
               Duration
@@ -143,6 +156,7 @@ const EditPrescription: React.FC = () => {
             />
           </div>
 
+          {/* Doctor */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">
               Doctor Name
@@ -158,6 +172,7 @@ const EditPrescription: React.FC = () => {
             />
           </div>
 
+          {/* Image Upload */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">
               Prescription Image
@@ -170,12 +185,17 @@ const EditPrescription: React.FC = () => {
             />
           </div>
 
+          {/* ✅ Image Preview */}
           {preview && (
             <div className="mt-4 flex justify-center">
               <img
                 src={preview}
                 alt="Prescription Preview"
                 className="rounded-lg shadow-md w-40 h-40 object-cover border border-gray-200"
+                onError={(e) => {
+                  e.currentTarget.src =
+                    "https://via.placeholder.com/150?text=No+Image";
+                }}
               />
             </div>
           )}
